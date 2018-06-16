@@ -127,3 +127,29 @@ class SymmetricGroupGeneratorsConstructor(object):
                 return a, b2
             else:  # m % 2 == 0
                 return a, b1
+
+    # THIS IS ONLY HALF THE TEST
+    # A test about the validity of the constructed generators
+    #
+    # The proof of the theorem that says why those 2 and 3 order elements are generating the respective
+    # Symmetric Group, includes the finding of one 3-order element 'a' and two 2-order elements 'x' and 'y',
+    # where a and x generate the Alternating Group while a and y generate the Symmetric Group.
+    #
+    # One requirement for the above to be true is that each pair (i.e. <a,x> and <a,y>) generate a prime cycle
+    # where that prime is less than degree-2. The only primes which arise are 2, 3, 5, 7, 11 and 13. In this
+    # test we only check that for the Symmetry Group generators, which is why the test is half.
+    #
+    # All examples are in the form of an element raised to a power, so we add the exponent to the variables.
+    def are_generators(self, exponent):
+        n = self.degree
+        generators = self.construct()
+        # In most cases, some power of the product of the Symmetric Group generator is a prime cycle.
+        # The only exception is for degree 16, where we need to take commutators.
+        if n != 16:
+            cycle = (generators[0]*generators[1])**exponent
+        else:
+            cycle = (generators[0]*generators[1]*(generators[0]**-1)*(generators[1]**-1))**exponent
+        # Check that the permutation in indeed a cycle and its order is one of the expected primes
+        if len(cycle.cyclic_form) == 1 and cycle.order() in [2, 3, 5, 7, 11, 13]:
+            return True
+        return False
