@@ -36,10 +36,39 @@ class AntiMagicSquareGenerator(object):
                 error_class_start + 'Provide either a positive integer or a tuple of the two Permutation generators')
 
         # The Symmetric Group defined needs to represent a Square
-        square_size = sqrt(degree)
-        if ceil(square_size) != square_size:
+        order = sqrt(degree)
+        if ceil(order) != order:
             raise RuntimeError(error_class_start + 'Degree needs to be a square number.')
 
         # Set the Symmetric Group's degree and generators that identify it
         self.degree = degree
         self.generators = generators
+        self.order = ceil(order)
+
+    def is_magic_square(self, el):
+        # Get the Magic Constant, i.e. the number to which all columns, rows and diagonals are equal
+        magic = 0
+        for i in range(self.order):
+            magic += el(i)
+        # Initialise diagonal numbers.
+        magic_diag_ford = 0
+        magic_diag_back = 0
+        # Start iterating one dimension of the square.
+        for i in range(self.order):
+            # Initialise the row and column numbers.
+            magic_row = 0
+            magic_col = 0
+            # Start iterating the second dimension of the square.
+            for j in range(self.order):
+                # We build the row and column magic number by using the order of the square (which
+                # is also the size of a row/column) to iterate through the columns of the square.
+                magic_row += el(i*self.order+j)
+                magic_col += el(j*self.order+i)
+            if magic_row != magic or magic_col != magic:
+                return False
+            # To build the diagonal magic number we only need one dimension.
+            magic_diag_ford += el(i*(self.order+1))
+            magic_diag_back += el((i+1)*(self.order-1))
+        if magic_diag_ford != magic or magic_diag_back != magic:
+            return False
+        return True
