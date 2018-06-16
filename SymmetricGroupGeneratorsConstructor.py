@@ -43,10 +43,46 @@ class SymmetricGroupGeneratorsConstructor(object):
 
     def construct(self):
         n = self.degree
-        # Get the a, b1 and b2 elements which will then be the components of the Symmetric Group generators
+        # For n less than 19 we get the generators manually.
         if n < 19:
-            # TODO: Add the different cases for n less than 19
-            return 'To be developed'
+            if n < 7 or n == 8:
+                # TODO: Add the cases for degree 1, 2, 3, 4, 5, 6 or 8 which are either trivial or not Gamma-groups
+                raise RuntimeError('For Symmetric groups of degree 1, 2, 3, 4, 5, 6 or 8 is to be developed')
+            elif n == 7:
+                # a = a6, y = (1, 4)(2, 7)(3, 5)
+                return self.get_an(6), Permutation(0, 3)(1, 6)(2, 4)
+            elif n == 9:
+                # a = a9, y = (1, 4)(2, 8)(5, 9)
+                return self.get_an(9), Permutation(0, 3)(1, 7)(4, 8)
+            elif n == 10:
+                # a = a9, y = (1, 4)(2, 10)(3, 7)(5, 9)(6, 8)
+                return self.get_an(9), Permutation(0, 3)(1, 9)(2, 6)(4, 8)(5, 7)
+            elif n == 11:
+                # a = a9, y = (1, 4)(2, 7)(5, 8)(6, 11)(3, 10)
+                return self.get_an(9), Permutation(0, 3)(1, 6)(4, 7)(5, 10)(2, 9)
+            elif n == 12:
+                # a = a12, y = (1, 4)(2, 10)(3, 11)(6, 9)(7, 8)
+                return self.get_an(12), Permutation(0, 3)(1, 9)(2, 10)(5, 8)(6, 7)
+            elif n == 13:
+                # a = a12, y = (1, 4)(2, 13)(6, 9)(7, 10)(8, 11)
+                return self.get_an(12), Permutation(0, 3)(1, 12)(5, 8)(6, 9)(7, 10)
+            elif n == 14:
+                # a = a12, y = (1, 4)(2, 13)(3, 14)(5, 8)(6, 9)(7, 10)(11, 12)
+                return self.get_an(12), Permutation(0, 3)(1, 12)(2, 13)(4, 7)(5, 8)(6, 9)(10, 11)
+            elif n == 15:
+                # a = a15, y = (1, 4)(3, 14)(6, 9)(7, 10)(12, 15)(5, 13)(2, 8)
+                return self.get_an(15), Permutation(0, 3)(2, 13)(5, 8)(6, 9)(11, 14)(4, 12)(1, 7)
+            elif n == 16:
+                # a = a15, y = (1, 4)(2, 16)(6, 9)(7, 10)(8, 11)(3, 13)(5, 15)
+                return self.get_an(15), Permutation(0, 3)(1, 15)(5, 8)(6, 9)(7, 10)(2, 12)(4, 14)
+            elif n == 17:
+                # a = a15, y = (1, 4)(2, 16)(3, 17)(12, 15)(6, 9)(7, 10)(8, 11)
+                return self.get_an(15), Permutation(0, 3)(1, 15)(2, 16)(11, 14)(5, 8)(6, 9)(7, 10)
+            elif n == 18:
+                # a = a18, y = (1, 8)(2, 16)(3, 4)(5, 7)(6, 10)(12, 13)(9, 14)
+                return self.get_an(18), Permutation(0, 7)(1, 15)(2, 3)(4, 6)(5, 9)(11, 12)(8, 13)
+        # For n greater or equal to 19, we need to get the a, b1 and b2 elements
+        # which will then be the components of the Symmetric Group generators.
         else:
             m = n // 6
             k = n % 6
