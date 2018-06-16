@@ -41,3 +41,53 @@ class SymmetricGroupGeneratorsConstructor(object):
             ck = ck*Permutation(6*i-1, 6*i+2)(6*i, 6*i+3)(6*i+1, 6*i+4)
         return ck
 
+    def construct(self):
+        n = self.degree
+        # Get the a, b1 and b2 elements which will then be the components of the Symmetric Group generators
+        if n < 19:
+            # TODO: Add the different cases for n less than 19
+            return 'To be developed'
+        else:
+            m = n // 6
+            k = n % 6
+            if k == 0:
+                a = self.get_an(n-3)
+                # b1 = (1,4)(2,n-2)(3,n-1)(n-6,n-3)(n-5,n)c_m-2
+                b1 = Permutation(0, 3)(1, n-3)(2, n-2)(n-7, n-4)(n-6, n-1)*self.get_ck(m-2)
+                # b2 = b1(n-11,n-8)
+                b2 = b1*Permutation(n-12, n-9)
+            elif k == 1:
+                a = self.get_an(n-1)
+                # b1 = (1,4)(2,n)(3,n-1)(n-6,n-3)(n-5,n-2)c_m-2
+                b1 = Permutation(0, 3)(1, n-1)(2, n-2)(n-7, n-4)(n-6, n-3)*self.get_ck(m-2)
+                # b2 = b1(n-12,n-9)
+                b2 = b1*Permutation(n-13, n-10)
+            elif k == 2:
+                a = self.get_an(n-2)
+                # b1 = (1,4)(2,n-1)(3,n)(n-8,n-5)(n-6,n-3)c_m-2
+                b1 = Permutation(0, 3)(1, n-2)(2, n-1)(n-9, n-6)(n-7, n-4)*self.get_ck(m-2)
+                # b2 = b1(n-7,n-4)
+                b2 = b1*Permutation(n-8, n-5)
+            elif k == 3:
+                a = self.get_an(n-3)
+                # b1 = (1,4)(2,n-2)(3,n-1)(n-3,n)c_m-1
+                b1 = Permutation(0, 3)(1, n-3)(2, n-2)(n-4, n-1)*self.get_ck(m-1)
+                # b2 = b1(n-8,n-5)
+                b2 = b1*Permutation(n-9, n-6)
+            elif k == 4:
+                a = self.get_an(n-1)
+                # b1 = (1,4)(2,n)(3,n-3)(n-10,n-7)(n-8,n-5)c_m-2
+                b1 = Permutation(0, 3)(1, n-1)(2, n-4)(n-11, n-8)(n-9, n-6)*self.get_ck(m-2)
+                # b2 = b1(n-9,n-6)
+                b2 = b1*Permutation(n-10, n-7)
+            else:  # k == 5
+                a = self.get_an(n-2)
+                # b1 = (1,4)(2,n-1)(3,n)(n-5,n-2)c_m-1
+                b1 = Permutation(0, 3)(1, n-2)(2, n-1)(n-6, n-3)*self.get_ck(m-1)
+                # b2 = b1(n-10,n-7)
+                b2 = b1*Permutation(n-11, n-8)
+            # Get the generators
+            if m % 2 == 1:
+                return a, b2
+            else:  # m % 2 == 0
+                return a, b1
