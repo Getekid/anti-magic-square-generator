@@ -11,3 +11,33 @@ class SymmetricGroupGeneratorsConstructor(object):
     def __init__(self, degree):
         self.degree = degree
 
+    # Generates the permutation (1,2,3)(4,5,6)...(n-2,n-1,n)
+    # i.e. the Permutation(0,1,2)(3,4,5)...(n-3,n-2,n-1) for python
+    # for a given 'n' which is a multiple of 3
+    def get_an(self, n):
+        # Validate 'n'
+        if n > self.degree:
+            raise RuntimeError('Error in calculating An, n needs to be smaller than the degree.')
+        if n <= 0 or n % 3 != 0:
+            raise RuntimeError('Error in calculating An, n needs to be positive and a multiple of 3.')
+        # Generate the permutation
+        an = Permutation(self.degree-1)
+        for i in range(0, n, 3):
+            an = an*Permutation(i, i+1, i+2)
+        return an
+
+    # Generate the permutation (6,9)(7,10)(8,11)(12,15)(13,16)...(6k,6k+3)(6k+1,6k+4)(6k+2,6k+5)
+    # i.e. the Permutation(5,8)(6,9)(7,10)(11,14)(12,15)...(6k-1,6k+2)(6k,6k+3)(6k+1,6k+4) in python
+    # for a given 'k' which is greater or equal to 1
+    def get_ck(self, k):
+        # Validate 'k'
+        if k > self.degree:
+            raise RuntimeError('Error in calculating Ck, k needs to be smaller than the degree.')
+        if k < 1:
+            raise RuntimeError('Error in calculating Ck, k needs to be greater or equal to 1.')
+        # Generate the permutation
+        ck = Permutation(self.degree-1)
+        for i in range(1, k+1):
+            ck = ck*Permutation(6*i-1, 6*i+2)(6*i, 6*i+3)(6*i+1, 6*i+4)
+        return ck
+
