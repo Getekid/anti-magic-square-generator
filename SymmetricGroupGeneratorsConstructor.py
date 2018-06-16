@@ -9,6 +9,10 @@ class SymmetricGroupGeneratorsConstructor(object):
     # J. Australian Math. Soc. 12 (1971), 63-68.
 
     def __init__(self, degree):
+        if degree < 1:
+            raise RuntimeError('Error in initiating the class: Degree needs to be greater or equal to 1.')
+        elif degree < 7 or degree == 8:
+            raise RuntimeError('Error in initiating the class: Degrees 1, 2, 3, 4, 5, 6 and 8 are not supported yet.')
         self.degree = degree
 
     # Generates the permutation (1, 2, 3)(4, 5, 6)...(n-2, n-1, n)
