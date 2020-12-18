@@ -72,3 +72,39 @@ class AntiMagicSquareGenerator(object):
         if magic_diag_ford != magic or magic_diag_back != magic:
             return False
         return True
+
+    def count(self):
+        # Initialise the element and the helper variables
+        el = self.generators[0]
+        baseEl = [i + 1 for i in range(9)]
+        add_end = False
+        case_num = 0
+        counter = 1
+
+        # Let's see whether this loop will close or not
+        while not el.is_Identity:
+            # if counter == factorial(9):
+            #     break
+            if not (add_end):
+                el = self.generators[1]
+                case_in_binary_list = [int(x) for x in bin(case_num)[2:]]
+                for i in case_in_binary_list:
+                    el = el*self.generators[1]
+                    el = el*self.generators[0]
+                    if i == 1:
+                        el = el*self.generators[0]
+                case_num += 1
+            else:
+                el = el*self.generators[1]
+            add_end = not add_end
+            if self.is_magic_square(el):
+                counter += 1
+                if counter % 20 == 0:
+                    print(counter)
+        return case_num
+
+
+generatorsLocal = Permutation(0, 1, 2)(3, 4, 5)(6, 7, 8), Permutation(0, 3)(1, 7)(4, 8)
+magic_square = Permutation([7, 0, 5, 2, 4, 6, 3, 8, 1])
+amsg = AntiMagicSquareGenerator(generatorsLocal)
+print(amsg.is_magic_square(magic_square))
